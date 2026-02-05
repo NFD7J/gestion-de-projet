@@ -28,6 +28,7 @@ if($project->end_date =='0000-00-00' || $project->start_date == '0000-00-00') {
             +
         </a>
     </div>
+    <a href="index.php?controller=project&action=chat&id=<?= $project->id_project ?>" class="btn-chat">💬 Discussion</a>
 
     <!-- Liste des collaborateurs -->
     <ul class="collaborators">
@@ -54,7 +55,9 @@ if($project->end_date =='0000-00-00' || $project->start_date == '0000-00-00') {
 
         <div class="project-actions">
             <a href="index.php?controller=project&action=addTask&id=<?= $project->id_project ?>" class="btn-outline">+ Ajouter une tâche</a>
-            <a href="index.php?controller=project&action=chat&id=<?= $project->id_project ?>" class="btn-primary">💬 Discussion</a>
+            <?php if($project->creator_id == $_SESSION['user']["id"]): ?>
+                <a href="" class="btn-danger" id="btnDeleteProject">supprimer Projet</a>
+            <?php endif; ?>
         </div>
     </div>
 
@@ -141,7 +144,6 @@ if($project->end_date =='0000-00-00' || $project->start_date == '0000-00-00') {
             <li>Alice a créé une tâche</li>
         </ul>
     </div>
-
 </section>
 
 <!-- popup ajouter un collaborateur -->
@@ -237,12 +239,29 @@ if($project->end_date =='0000-00-00' || $project->start_date == '0000-00-00') {
 
 </div>
 
+<!-- modal pour supprimer le projet -->
+<div id="deleteProjectModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3>Supprimer le projet</h3>
+        <p>Êtes-vous sûr de vouloir supprimer ce projet ?</p>
+
+        <form id="deleteProjectForm" method="POST" action="index.php?controller=project&action=deleteProject">
+            <input type="hidden" name="project_id" value="<?= $project->id_project ?>">
+            <div class="form-actions">
+                <button type="submit" class="btn-danger">Oui, supprimer</button>
+                <button type="button" class="btn-outline" id="cancelDelete">Annuler</button>
+            </div>
+        </form>
+    </div>
+</div>
 
 <!-- Styles  -->
 <style>
     .project-page {
-        padding: 40px;
+        padding: 40px 0 40px 40px;
         max-width: 1050px;
+        width: 1000px;
         margin: auto;
         font-family: system-ui, sans-serif;
     }
@@ -252,13 +271,14 @@ if($project->end_date =='0000-00-00' || $project->start_date == '0000-00-00') {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        gap: 10px;
         margin-bottom: 25px;
         max-width: 100%;
     }
 
     .project-header > div{
         min-width: 0;
-        max-width: 65%;
+        max-width: 60%;
     }
 
     .project-desc {
@@ -274,7 +294,7 @@ if($project->end_date =='0000-00-00' || $project->start_date == '0000-00-00') {
         margin-bottom: 1em;
         display: flex;
         gap: 10px;
-        min-width: 35%;
+        min-width: 40%;
     }
 
     /* Buttons */
@@ -325,6 +345,25 @@ if($project->end_date =='0000-00-00' || $project->start_date == '0000-00-00') {
     .btn-outline:hover {
         background: #2563eb;
         color: white;
+    }
+
+    .btn-chat {
+        width: fit-content;
+        position: relative;
+        display: block;
+        background: #10b981;
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: 0.2s;
+        text-decoration: none;
+    }
+
+    .btn-chat:hover {
+        background: #0f766e;
     }
 
     /* Infos */
@@ -831,6 +870,28 @@ const projectModal = document.getElementById("projectModal");
         if (e.key === "Escape" && projectModal.style.display === "flex") {
             projectModal.style.display = "none";
             projectForm.reset();
+        }
+    });
+
+///////////// popup suppression du projet
+const deleteProjectModal = document.getElementById("deleteProjectModal");
+    const deleteProjectForm = document.getElementById("deleteProjectForm");
+    const deleteProjectBtn = document.getElementById("btnDeleteProject");
+    const closeDeleteProject = deleteProjectModal.querySelector(".close");
+    const cancelDeleteProject = document.getElementById("cancelDelete");
+
+    // Ouvrir modal
+    deleteProjectBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        deleteProjectModal.style.display = "flex";
+    });
+
+    // Fermer modal
+    closeDeleteProject.addEventListener("click", () => deleteProjectModal.style.display = "none");
+    cancelDeleteProject.addEventListener("click", () => deleteProjectModal.style.display = "none");
+    window.addEventListener("click", (e) => {
+        if(e.target === deleteProjectModal){
+            deleteProjectModal.style.display = "none";
         }
     });
 

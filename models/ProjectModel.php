@@ -29,7 +29,7 @@ class ProjectModel extends Dbconnect
 
     public function delete(int $id)
     {
-        $this->request = $this->connection->prepare("DELETE FROM project WHERE id = :id");
+        $this->request = $this->connection->prepare("DELETE FROM project WHERE id_project = :id");
         $this->request->bindValue(':id', $id);
         $this->executeTryCatch();
     }

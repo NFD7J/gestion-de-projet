@@ -47,19 +47,13 @@ class ProjectController extends Controller
         }
     }
 
-    public function delete(int $id)
+    public function deleteProject()
     {
-        if(isset($_POST["true"])){
-            $project = new ProjectModel();
-            $project->delete(intval($id));
-            header("location: index.php?controller=project");
-        }else if(isset($_POST["false"])){
-            header("location: index.php?controller=project");
-        }else{
-            $projectModel = new ProjectModel();
-            $project = $projectModel->getProject(intval($id));
-        }
-        $this->render("project/deleteproject",["project"=>$project]);
+        $id = intval($_POST["project_id"]) ?? header("location: index.php?controller=project");
+        $projectModel = new ProjectModel();
+        $projectModel->delete($id);
+        header("location: index.php?controller=project");
+        exit();
     }
 
     public function openProject($id)

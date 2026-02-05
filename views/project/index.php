@@ -1,14 +1,18 @@
 <?php $title = "Dashboard" ?>
 <style>
     .dashboard-section {
-        max-width: 1400px;
+        max-width: 1000px;
         margin: 40px auto;
         padding: 0 24px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
     .dashboard-header {
         display: flex;
         justify-content: space-between;
+        width: 100%;
         gap: 1em;
         align-items: center;
         margin-bottom: 32px;

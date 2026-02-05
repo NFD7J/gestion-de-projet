@@ -18,12 +18,12 @@
         <div class="form-row">
             <div class="form-group">
                 <label for="start_date">Date de début</label>
-                <input type="datetime-local" id="start_date" name="start_date" >
+                <input type="datetime-local" id="start" name="start" >
             </div>
 
             <div class="form-group">
                 <label for="end_date">Date de fin</label>
-                <input type="datetime-local" id="end_date" name="end_date" >
+                <input type="datetime-local" id="end" name="end" >
             </div>
         </div>
 
