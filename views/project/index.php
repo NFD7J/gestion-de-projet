@@ -67,6 +67,7 @@
         margin-bottom: 12px;
          /* 👇 TRONCATURE */
         display: -webkit-box;
+        line-clamp: 3;
         -webkit-line-clamp: 3;      /* nombre de lignes */
         -webkit-box-orient: vertical;
         overflow: hidden;
